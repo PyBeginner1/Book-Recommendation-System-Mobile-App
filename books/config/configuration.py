@@ -4,7 +4,7 @@ from books.logger import logging
 from books.exception import BookException
 from books.constant import *
 from books.util.util import read_yaml_file
-from books.entity.config_entity import DataIngestionConfig, TrainingPipelineConfig
+from books.entity.config_entity import DataIngestionConfig, TrainingPipelineConfig, DataValidationConfig
 
 
 class Configuration:
@@ -23,7 +23,7 @@ class Configuration:
         try:
             artifact_dir = self.training_pipeline_config.artifact_dir
 
-            data_ingestion_config_info = self.config_info[DATA_INGESTION_CONFIG_KEY]
+            data_ingestion_config_info = self.config_info['data_ingestion_config']
 
             dataset_download_url = data_ingestion_config_info['dataset_download_url']
 
@@ -39,6 +39,39 @@ class Configuration:
             return data_ingestion_config
         except Exception as e:
             raise BookException(e, sys) from e
+        
+    
+    def get_data_validation_config(self) -> DataValidationConfig:
+        try:
+            artifact_dir = self.training_pipeline_config.artifact_dir
+
+            data_validation_config_info = self.config_info['data_validation_config']
+
+            data_ingestion_config_info = self.config_info['data_ingestion_config']
+
+            books_csv_file_path = os.path.join(artifact_dir, 
+                                          data_ingestion_config_info['ingested_dir'],
+                                          data_validation_config_info['books_csv_file'])
+            
+            ratings_csv_file_path = os.path.join(artifact_dir, 
+                                          data_ingestion_config_info['ingested_dir'],
+                                          data_validation_config_info['ratings_csv_file'])
+            
+            clean_data_dir_path = os.path.join(artifact_dir,
+                                               data_validation_config_info['clean_data_dir'])
+            
+            serialized_objects_dir_path = os.path.join(artifact_dir,
+                                                      data_validation_config_info['serialized_objects_dir'])
+
+            data_validation_config = DataValidationConfig(books_csv_file=books_csv_file_path,
+                                                          ratings_csv_file=ratings_csv_file_path,
+                                                          clean_data_dir=clean_data_dir_path,
+                                                          serialized_objects_dir=serialized_objects_dir_path)
+            
+            logging.info(f'Data Validation Config: {data_validation_config}')
+            return data_validation_config
+        except Exception as e:
+            raise BookException(e, sys) from e 
         
 
     def get_training_pipeline_config(self) -> TrainingPipelineConfig:
