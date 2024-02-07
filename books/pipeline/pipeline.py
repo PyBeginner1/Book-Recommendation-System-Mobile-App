@@ -7,7 +7,7 @@ from books.exception import BookException
 from books.component.data_ingestion import DataIngestion
 from books.component.data_validation import DataValidation
 from books.config.configuration import Configuration
-
+from books.component.data_transformation import DataTransformation
 
 class Pipeline:
     def __init__(self, config = Configuration()):
@@ -31,10 +31,19 @@ class Pipeline:
         except Exception as e:
             raise BookException(e, sys) from e
         
+    def start_data_transformation(self):
+        try:
+            data_transformation = DataTransformation(data_transformation_config=self.config.get_data_transformation_config(),
+                                                     data_validation_config=self.config.get_data_validation_config())
+            return data_transformation.initiate_data_transformation()
+        except Exception as e:
+            raise BookException(e, sys) from e
+        
 
     def run_pipeline(self):
         try:
             data_ingestion = self.start_data_ingestion()
             self.start_data_validation()
+            self.start_data_transformation()
         except Exception as e:
             raise BookException(e, sys) from e

@@ -8,9 +8,14 @@ data_ingestion_config:
   raw_data_dir: raw_data
   ingested_dir: ingested_data
 
+
 data_validation_config:
   books_csv_file: BX-Books.csv
   ratings_csv_file: BX-Book-Ratings.csv
   clean_data_dir : clean_data 
   serialized_objects_dir: serialized_objects
+  
+
+data_transformation_config:
+  transformed_data_dir: transformed_data
 

@@ -7,3 +7,5 @@ DataIngestionConfig=namedtuple('DataIngestionConfig', ['dataset_download_url', '
 DataValidationConfig = namedtuple('DataValidationConfig',['books_csv_file', 'ratings_csv_file',
                                                           'clean_data_dir','serialized_objects_dir'])
 
+DataTransformationConfig = namedtuple('DataTransformationConfig', ['clean_data_path', 'transformed_data_dir'])
+

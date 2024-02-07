@@ -4,7 +4,7 @@ from books.logger import logging
 from books.exception import BookException
 from books.constant import *
 from books.util.util import read_yaml_file
-from books.entity.config_entity import DataIngestionConfig, TrainingPipelineConfig, DataValidationConfig
+from books.entity.config_entity import DataIngestionConfig, TrainingPipelineConfig, DataValidationConfig, DataTransformationConfig
 
 
 class Configuration:
@@ -70,6 +70,25 @@ class Configuration:
             
             logging.info(f'Data Validation Config: {data_validation_config}')
             return data_validation_config
+        except Exception as e:
+            raise BookException(e, sys) from e 
+        
+
+    def get_data_transformation_config(self) -> DataTransformationConfig:
+        try:
+            artifact_dir = self.training_pipeline_config.artifact_dir
+
+            data_transformation_config = self.config_info['data_transformation_config']
+            data_validation_config = self.config_info['data_validation_config']
+
+            clean_data_path = os.path.join(artifact_dir, data_validation_config['clean_data_dir'], 'clean_data.csv')
+            transformed_data_dir_path = os.path.join(artifact_dir, data_transformation_config['transformed_data_dir'])
+
+            data_transformation_config = DataTransformationConfig(clean_data_path=clean_data_path,
+                                                                  transformed_data_dir=transformed_data_dir_path)
+            
+            logging.info(f'Data Transformation Config: {data_transformation_config}')
+            return data_transformation_config
         except Exception as e:
             raise BookException(e, sys) from e 
         
