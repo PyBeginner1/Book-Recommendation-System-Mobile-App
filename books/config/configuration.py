@@ -4,7 +4,8 @@ from books.logger import logging
 from books.exception import BookException
 from books.constant import *
 from books.util.util import read_yaml_file
-from books.entity.config_entity import DataIngestionConfig, TrainingPipelineConfig, DataValidationConfig, DataTransformationConfig
+from books.entity.config_entity import DataIngestionConfig, TrainingPipelineConfig, DataValidationConfig, DataTransformationConfig, \
+                                        ModelTrainerConfig, ModelRecommendationConfig
 
 
 class Configuration:
@@ -89,6 +90,56 @@ class Configuration:
             
             logging.info(f'Data Transformation Config: {data_transformation_config}')
             return data_transformation_config
+        except Exception as e:
+            raise BookException(e, sys) from e 
+        
+    
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+        try:
+            artifact_dir = self.training_pipeline_config.artifact_dir
+
+            model_trainer_config_info = self.config_info['model_trainer_config']
+            data_transformation_config_info = self.config_info['data_transformation_config']
+
+            trained_model_dir = os.path.join(artifact_dir, model_trainer_config_info['trained_model_dir'])
+
+            trained_model_name = model_trainer_config_info['trained_model_name']
+
+            transformed_data_file_dir = os.path.join(artifact_dir, data_transformation_config_info['transformed_data_dir'],
+                                                     data_transformation_config_info['transformed_data_file'])
+
+            model_trainer_config = ModelTrainerConfig(trained_model_dir=trained_model_dir,
+                                                      trained_model_name=trained_model_name,
+                                                      transformed_data_file_dir=transformed_data_file_dir)
+            
+            return model_trainer_config
+        except Exception as e:
+            raise BookException(e, sys) from e 
+        
+    
+    def get_model_recommendation_config(self) -> ModelRecommendationConfig:
+        try:
+            model_recommendation_config_info = self.config_info['recommendation_config']
+            model_trainer_config_info = self.config_info['model_trainer_config']
+            data_validation_config_info = self.config_info['data_validation_config']
+
+            artifact_dir = self.training_pipeline_config.artifact_dir
+            trained_model_name = model_trainer_config_info['trained_model_name']
+            trained_model_dir = os.path.join(artifact_dir, model_trainer_config_info['trained_model_dir'])
+            poster_api = model_recommendation_config_info['poster_api_url']
+
+            book_name_serialized_objects = os.path.join(artifact_dir, data_validation_config_info['serialized_objects_dir'], 'book_names.pkl')
+            book_pivot_serialized_objects = os.path.join(artifact_dir, data_validation_config_info['serialized_objects_dir'], 'book_pivot.pkl')
+            final_rating_serialized_objects = os.path.join(artifact_dir, data_validation_config_info['serialized_objects_dir'], 'final_rating.pkl')
+
+            trained_model_path = os.path.join(trained_model_dir,trained_model_name)
+          
+            model_recommendation_config = ModelRecommendationConfig(book_name_serialized_objects=book_name_serialized_objects,
+                                                                    book_pivot_serialized_objects=book_pivot_serialized_objects,
+                                                                    final_rating_serialized_objects=final_rating_serialized_objects,
+                                                                    trained_model_path=trained_model_path)
+            
+            return model_recommendation_config
         except Exception as e:
             raise BookException(e, sys) from e 
         

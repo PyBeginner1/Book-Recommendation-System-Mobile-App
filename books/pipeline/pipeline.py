@@ -8,6 +8,8 @@ from books.component.data_ingestion import DataIngestion
 from books.component.data_validation import DataValidation
 from books.config.configuration import Configuration
 from books.component.data_transformation import DataTransformation
+from books.component.model_trainer import ModelTrainer
+
 
 class Pipeline:
     def __init__(self, config = Configuration()):
@@ -39,11 +41,19 @@ class Pipeline:
         except Exception as e:
             raise BookException(e, sys) from e
         
+    
+    def start_model_trainer(self):
+        try:
+            model_trainer = ModelTrainer(model_trainer_config=self.config.get_model_trainer_config())
+            return model_trainer.initiate_model_trainer()
+        except Exception as e:
+            raise BookException(e, sys) from e
 
     def run_pipeline(self):
         try:
             data_ingestion = self.start_data_ingestion()
             self.start_data_validation()
             self.start_data_transformation()
+            self.start_model_trainer()
         except Exception as e:
             raise BookException(e, sys) from e

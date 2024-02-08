@@ -14,8 +14,17 @@ data_validation_config:
   ratings_csv_file: BX-Book-Ratings.csv
   clean_data_dir : clean_data 
   serialized_objects_dir: serialized_objects
-  
+
 
 data_transformation_config:
   transformed_data_dir: transformed_data
+  transformed_data_file: transformed_book_data.pkl
 
+
+model_trainer_config:
+  trained_model_dir: trained_model
+  trained_model_name: model.pkl
+
+
+recommendation_config:
+  poster_api_url: https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US

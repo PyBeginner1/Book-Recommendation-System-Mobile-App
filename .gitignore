@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 books/artifact
+myvenv/
 
 # C extensions
 *.so

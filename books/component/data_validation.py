@@ -35,6 +35,7 @@ class DataValidation:
                                 'Book-Rating':'rating'},inplace=True)
 
 
+            #Users with more than 200 ratings
             x = ratings['user_id'].value_counts() > 200
             y = x[x].index
             ratings = ratings[ratings['user_id'].isin(y)]
