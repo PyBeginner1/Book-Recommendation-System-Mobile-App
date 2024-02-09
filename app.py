@@ -115,5 +115,5 @@ if __name__ == "__main__":
         book_names)
     
     #recommendation
-    if st.button('Show Recommendation'):
+    if st.button('Show Book Recommendation'):
         obj.recommendations_engine(selected_books)

@@ -42,7 +42,7 @@ Replace `app.py` with the actual name of your main script if it's different.
 * Streamlit
 * **Other:** Please refer to `requirements.txt` for a complete list of necessary dependencies.
 
-## Acknowledgments
+## Acknowledgments: 
 
 * **Scikit-learn:** We are grateful to the Scikit-learn team for providing the powerful Nearest Neighbors algorithm, enabling us to offer accurate and personalized book recommendations. (https://scikit-learn.org/)
 * **Streamlit:** A big thank you to the Streamlit developers for creating such a user-friendly and efficient framework for building our mobile app's interface. Their work has made it possible to deliver a smooth and enjoyable experience for bookworms exploring new reads. (https://streamlit.io/)
