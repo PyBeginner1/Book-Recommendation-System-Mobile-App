@@ -19,6 +19,7 @@ This mobile app empowers bookworms to discover their next great read with the he
 
 ```bash
 pip install -r requirements.txt
+```
 
 
 This command will install all the Python packages needed for the app to function properly, including Streamlit and other relevant libraries.
@@ -27,9 +28,9 @@ This command will install all the Python packages needed for the app to function
 
 1. **Run the App:** Navigate to the directory containing your app's code and run the main script using the following command:
 
-bash
+```bash
 streamlit run app.py
-
+```
 
 Replace `app.py` with the actual name of your main script if it's different.
 
